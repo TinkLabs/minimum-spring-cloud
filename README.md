@@ -5,6 +5,7 @@ including the minimum module for b2c spring-cloud
 
 * Spring-boot: 2.1.1.RELEASE
 * Spring-cloud: Greenwich.M1
+* Java : 1.8
 
 ### modules
 
