@@ -1,7 +1,7 @@
 spring:
   cloud:
     consul:
-      host: ${consul.address:10.0.10.202}
+      host: ${consul.address:localhost}
       port: ${consul.port:8500}
       discovery:
         instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
