@@ -44,3 +44,12 @@ the default profile is `dev`, config in application.yml
 ### Codepipe
 
 a buildspec.yml with s3 cache enable for maven 
+
+
+### Usage
+
+You can use the `create.sh` script to create a project base on this minimum dependence.
+
+navigate to this project directory and use the following command, and follow the tip ,input the project name, group id, artifact id ,project location and project package.
+
+    ./create.sh  
