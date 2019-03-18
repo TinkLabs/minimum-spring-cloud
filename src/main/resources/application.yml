@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: minimum-spring-cloud
+  cloud:
+    inetutils:
+      ignored-interfaces:
+        - ecs-eth0
+  profiles:
+    active: ${profile.env:dev}
+server:
+  port: 8080

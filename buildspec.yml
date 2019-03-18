@@ -1,0 +1,30 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+    - echo Logging in
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo Build started on `date`
+      - export IMAGE_TAG=`date '+%Y%m%d%H%M%S'`
+      - docker run --rm -v /tmp/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:/app  maven:3-jdk-8-alpine sh -c "cd /app && mvn clean install package dockerfile:build -Dmaven.test.skip=true"
+      - export IMAGE_NAME=`cat target/docker/image-name`
+      - docker tag $IMAGE_NAME $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo image push completed on `date`
+      - echo Writing image definitions file...
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files:
+  - imagedefinitions.json
+
+cache:
+  paths:
+  - '/tmp/.m2/**/*'

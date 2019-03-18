@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    consul:
+      host: ${consul.address:10.0.10.202}
+      port: ${consul.port:8500}
+      discovery:
+        instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        register-health-check: true
+        health-check-timeout: 60s
+        health-check-interval: 10s
+        health-check-critical-timeout: 30m
+#        fail-fast: false
+        heartbeat:
+          enabled: true
+          ttl-value: 30
+        acl-token: ${consul.access.token:${CONSUL_TOKEN:${spring.cloud.consul.token:${SPRING_CLOUD_CONSUL_TOKEN:}}}}
